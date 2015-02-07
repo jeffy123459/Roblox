@@ -1,12 +1,14 @@
-player = game.Players.LocalPlayer
-mouse = player:GetMouse()
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
 
-a = false
+local ignore = Instance.new('Model',game.Workspace)
+mouse.TargetFilter = ignore
+local a = false
 
 mouse.Button1Down:connect(function()
 a = false
 repeat wait(.01) 
-local par = Instance.new("Part", workspace) 
+local par = Instance.new("Part", ignore) 
 par.Name = "line"
 par.FormFactor = "Custom"
 par.Anchored = true 
@@ -19,11 +21,11 @@ end)
 
 
 player.Chatted:connect(function(msg)
-if msg == "clear" then
+if msg:lower() == "clear" then
 for k,v in pairs(workspace:GetChildren()) do
-if v.Name == "line" then
-v:remove()
-end
+ypcall(function()ignore:remove()end)
+ignore = Instance.new('Model',Workspace)
+mouse.TargetFilter = ignore
 end
 end
 end)
